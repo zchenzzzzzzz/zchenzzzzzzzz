@@ -1,0 +1,707 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Microsoft YaHei', Arial, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.game-container {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    max-width: 1200px;
+    width: 100%;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 30px;
+    font-size: 2.5em;
+    background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 图片选择器样式 */
+.image-selector {
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.image-selector h3 {
+    color: #333;
+    margin-bottom: 15px;
+    font-size: 1.2em;
+}
+
+.image-gallery {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.image-option {
+    width: 90px;
+    padding: 8px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    background: rgba(255, 255, 255, 0.8);
+    text-align: center;
+}
+
+.image-option:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+.image-option.active {
+    border-color: #e74c3c;
+    background: linear-gradient(45deg, #ff9a9e, #fecfef);
+}
+
+.image-option img {
+    width: 60px;
+    height: 60px;
+    border-radius: 6px;
+    object-fit: cover;
+    margin-bottom: 6px;
+}
+
+.image-option span {
+    display: block;
+    font-size: 11px;
+    color: #333;
+    font-weight: bold;
+}
+
+.image-option.add-new {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 2px dashed #ccc;
+    background: rgba(248, 249, 250, 0.8);
+}
+
+.add-icon {
+    font-size: 24px;
+    color: #666;
+    margin-bottom: 3px;
+}
+
+.image-option.add-new:hover {
+    border-color: #e74c3c;
+    background: rgba(255, 235, 235, 0.8);
+}
+
+.game-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding: 15px;
+    background: linear-gradient(45deg, #ff9a9e, #fecfef);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.score {
+    display: flex;
+    gap: 20px;
+    font-weight: bold;
+    color: #333;
+}
+
+.btn {
+    background: linear-gradient(45deg, #e74c3c, #c0392b);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+    background: linear-gradient(45deg, #c0392b, #a93226);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+.btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.game-board {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    align-items: flex-start;
+    margin-bottom: 30px;
+}
+
+.puzzle-container {
+    width: 450px;
+    height: 450px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 3px;
+    padding: 15px;
+    background: linear-gradient(45deg, #dc2626, #b91c1c);
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(220, 38, 38, 0.3);
+    position: relative;
+}
+
+.puzzle-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.2) 2px, transparent 2px),
+        radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.15) 1px, transparent 1px),
+        radial-gradient(circle at 40% 70%, rgba(255, 255, 255, 0.1) 1.5px, transparent 1.5px);
+    background-size: 30px 30px, 25px 25px, 35px 35px;
+    border-radius: 15px;
+    pointer-events: none;
+}
+
+.puzzle-piece {
+    width: 100%;
+    height: 100%;
+    background-size: 450px 450px;
+    border-radius: 8px;
+    cursor: grab;
+    transition: all 0.2s ease;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.puzzle-piece:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    border-color: rgba(255, 255, 255, 0.6);
+}
+
+.puzzle-piece:active {
+    cursor: grabbing;
+    transform: scale(0.98);
+}
+
+.puzzle-piece.dragging {
+    opacity: 0.7;
+    transform: rotate(5deg) scale(1.1);
+    z-index: 1000;
+}
+
+.puzzle-piece.empty {
+    background: linear-gradient(45deg, 
+        rgba(255, 255, 255, 0.1), 
+        rgba(255, 255, 255, 0.05)
+    );
+    border: 2px dashed rgba(255, 255, 255, 0.4);
+    cursor: default;
+}
+
+.puzzle-piece.empty:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+.puzzle-piece.hint {
+    border: 3px solid #f1c40f;
+    box-shadow: 0 0 15px rgba(241, 196, 15, 0.6);
+    animation: hintPulse 1s ease-in-out infinite alternate;
+}
+
+@keyframes hintPulse {
+    from { transform: scale(1); }
+    to { transform: scale(1.05); }
+}
+
+/* 参考区域样式 */
+.reference-section {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    min-width: 250px;
+}
+
+.original-image, .reference-image, .game-stats {
+    text-align: center;
+}
+
+.original-image h3, .reference-image h3, .game-stats h3 {
+    color: #333;
+    margin-bottom: 15px;
+    font-size: 1.2em;
+}
+
+.image-frame {
+    position: relative;
+    display: inline-block;
+}
+
+.original-image img, .reference-image img {
+    width: 150px;
+    height: 150px;
+    border-radius: 8px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    border: 2px solid #e74c3c;
+    object-fit: cover;
+}
+
+.grid-overlay {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    right: 3px;
+    bottom: 3px;
+    pointer-events: none;
+    border-radius: 7px;
+}
+
+.grid-line {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.6);
+}
+
+.grid-line:nth-child(1) {
+    top: 33.33%;
+    left: 0;
+    right: 0;
+    height: 2px;
+}
+
+.grid-line:nth-child(2) {
+    top: 66.66%;
+    left: 0;
+    right: 0;
+    height: 2px;
+}
+
+.grid-line:nth-child(3) {
+    left: 33.33%;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+}
+
+.grid-line:nth-child(4) {
+    left: 66.66%;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+}
+
+/* 游戏统计样式 */
+.game-stats {
+    background: linear-gradient(45deg, #ffecd2, #fcb69f);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+.stats-grid {
+    display: grid;
+    gap: 12px;
+}
+
+.stat-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 8px;
+}
+
+.stat-label {
+    font-weight: bold;
+    color: #333;
+    font-size: 14px;
+}
+
+.stat-value {
+    font-weight: bold;
+    color: #e74c3c;
+    font-size: 16px;
+}
+
+.controls {
+    text-align: center;
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    margin: 15% auto;
+    padding: 40px;
+    border-radius: 20px;
+    width: 450px;
+    max-width: 90vw;
+    text-align: center;
+    color: white;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    animation: slideIn 0.3s ease;
+}
+
+.modal-content h2 {
+    margin-bottom: 20px;
+    font-size: 2em;
+}
+
+.win-stats p {
+    margin: 10px 0;
+    font-size: 1.1em;
+}
+
+.achievement {
+    margin: 15px 0;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    font-weight: bold;
+}
+
+.win-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+/* 上传区域样式 */
+.upload-area {
+    border: 3px dashed rgba(255, 255, 255, 0.5);
+    border-radius: 15px;
+    padding: 40px;
+    margin: 20px 0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.upload-area:hover {
+    border-color: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.upload-icon {
+    font-size: 48px;
+    margin-bottom: 15px;
+}
+
+.upload-hint {
+    font-size: 14px;
+    opacity: 0.8;
+    margin-top: 10px;
+}
+
+.upload-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+/* 难度选择模态框样式 */
+.difficulty-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin: 30px 0;
+}
+
+.difficulty-option {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    padding: 25px;
+    text-align: center;
+    transition: all 0.3s ease;
+    border: 3px solid transparent;
+    cursor: pointer;
+}
+
+.difficulty-option:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    border-color: rgba(255, 255, 255, 0.8);
+}
+
+.difficulty-option.selected {
+    border-color: #e74c3c;
+    background: linear-gradient(45deg, #ff9a9e, #fecfef);
+}
+
+.difficulty-icon {
+    font-size: 48px;
+    margin-bottom: 15px;
+}
+
+.difficulty-option h3 {
+    color: #333;
+    margin-bottom: 15px;
+    font-size: 1.4em;
+}
+
+.difficulty-details {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.difficulty-details p {
+    color: #555;
+    margin: 8px 0;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.select-difficulty-btn {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.modal-close-btn {
+    text-align: center;
+    margin-top: 20px;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideIn {
+    from { 
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    to { 
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+}
+
+/* 响应式设计 */
+@media (max-width: 1024px) {
+    .game-board {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .reference-section {
+        flex-direction: row;
+        justify-content: center;
+        flex-wrap: wrap;
+        min-width: auto;
+    }
+}
+
+@media (max-width: 768px) {
+    .puzzle-container {
+        width: 350px;
+        height: 350px;
+    }
+    
+    .puzzle-piece {
+        background-size: 350px 350px;
+    }
+    
+    .original-image img, .reference-image img {
+        width: 120px;
+        height: 120px;
+    }
+    
+    .controls {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .game-info {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .score {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+    
+    .image-gallery {
+        justify-content: center;
+    }
+    
+    .reference-section {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .win-buttons {
+        flex-direction: column;
+    }
+    
+    /* 难度选择模态框小屏幕适配 */
+    #difficultyModal .modal-content {
+        width: 95vw;
+        margin: 5% auto;
+    }
+    
+    #difficultyModal .difficulty-options {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    
+    #difficultyModal .difficulty-option {
+        min-height: auto;
+        padding: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .image-option {
+        width: 75px;
+    }
+    
+    .image-option img {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .original-image img, .reference-image img {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .modal-content {
+        width: 95vw;
+        padding: 20px;
+    }
+}
+
+/* 拖拽相关样式 */
+.drop-zone {
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px dashed rgba(255, 255, 255, 0.6);
+}
+
+.drag-over {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: #f1c40f;
+}
+
+/* 难度选择模态框专用样式 */
+#difficultyModal .modal-content {
+    width: 600px;
+    max-width: 90vw;
+    margin: 8% auto;
+    padding: 20px;
+}
+
+#difficultyModal .difficulty-options {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin: 20px 0;
+}
+
+#difficultyModal .difficulty-option {
+    padding: 15px 10px;
+    border-radius: 10px;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+#difficultyModal .difficulty-icon {
+    font-size: 28px;
+    margin-bottom: 8px;
+}
+
+#difficultyModal .difficulty-option h3 {
+    font-size: 1.1em;
+    margin-bottom: 8px;
+}
+
+#difficultyModal .difficulty-details {
+    flex-grow: 1;
+    margin-bottom: 10px;
+}
+
+#difficultyModal .difficulty-details p {
+    font-size: 11px;
+    margin: 3px 0;
+    line-height: 1.3;
+}
+
+#difficultyModal .select-difficulty-btn {
+    padding: 8px 12px;
+    font-size: 12px;
+    margin-top: auto;
+} 

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>九宫格拼图游戏</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <h1>九宫格拼图游戏</h1>
+        
+        <!-- 图片选择区域 -->
+        <div class="image-selector">
+            <h3>选择拼图图片</h3>
+            <div class="image-gallery">
+                <div class="image-option active" data-image="Snipaste_2025-05-28_19-20-16.png">
+                    <img src="Snipaste_2025-05-28_19-20-16.png" alt="柴犬图片">
+                    <span>可爱柴犬</span>
+                </div>
+                <!-- 预留扩展位置 -->
+                <div class="image-option add-new" id="addImageBtn">
+                    <div class="add-icon">+</div>
+                    <span>添加新图片</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="game-info">
+            <div class="score">
+                <span>移动次数: <span id="moveCount">0</span></span>
+                <span>用时: <span id="timer">00:00</span></span>
+                <span>难度: <span id="difficulty">简单</span></span>
+            </div>
+            <button id="shuffleBtn" class="btn">重新开始</button>
+        </div>
+
+        <div class="game-board">
+            <div class="puzzle-container" id="puzzleContainer">
+                <!-- 九宫格拼图块将在此生成 -->
+            </div>
+            
+            <div class="reference-section">
+                <div class="original-image">
+                    <h3>原图展示</h3>
+                    <div class="image-frame">
+                        <img id="originalImg" src="Snipaste_2025-05-28_19-20-16.png" alt="原图">
+                        <div class="grid-overlay">
+                            <div class="grid-line"></div>
+                            <div class="grid-line"></div>
+                            <div class="grid-line"></div>
+                            <div class="grid-line"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="reference-image">
+                    <h3>参考图片</h3>
+                    <img id="referenceImg" src="Snipaste_2025-05-28_19-20-16.png" alt="参考图片">
+                </div>
+                
+                <div class="game-stats">
+                    <h3>游戏统计</h3>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <span class="stat-label">最佳记录</span>
+                            <span class="stat-value" id="bestTime">--:--</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">最少步数</span>
+                            <span class="stat-value" id="bestMoves">--</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">完成次数</span>
+                            <span class="stat-value" id="completedGames">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button id="hintBtn" class="btn">显示提示</button>
+            <button id="resetBtn" class="btn">重置游戏</button>
+            <button id="difficultyBtn" class="btn">切换难度</button>
+        </div>
+    </div>
+
+    <!-- 胜利提示模态框 -->
+    <div id="winModal" class="modal">
+        <div class="modal-content">
+            <h2>🎉 恭喜您完成拼图！</h2>
+            <div class="win-stats">
+                <p>移动次数: <span id="finalMoves"></span></p>
+                <p>用时: <span id="finalTime"></span></p>
+                <div class="achievement" id="achievement"></div>
+            </div>
+            <div class="win-buttons">
+                <button id="playAgainBtn" class="btn">再玩一次</button>
+                <button id="nextLevelBtn" class="btn">下一难度</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 图片上传模态框 -->
+    <div id="uploadModal" class="modal">
+        <div class="modal-content">
+            <h2>添加自定义图片</h2>
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-icon">📁</div>
+                <p>点击或拖拽图片文件到此区域</p>
+                <p class="upload-hint">支持 JPG、PNG、GIF 格式</p>
+                <input type="file" id="imageInput" accept="image/*" style="display: none;">
+            </div>
+            <div class="upload-buttons">
+                <button id="confirmUpload" class="btn" disabled>确认添加</button>
+                <button id="cancelUpload" class="btn">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 难度选择模态框 -->
+    <div id="difficultyModal" class="modal">
+        <div class="modal-content">
+            <h2>选择游戏难度</h2>
+            <div class="difficulty-options">
+                <div class="difficulty-option" data-difficulty="simple">
+                    <div class="difficulty-icon">🟢</div>
+                    <h3>简单</h3>
+                    <div class="difficulty-details">
+                        <p>• 较少打乱次数</p>
+                        <p>• 允许使用提示</p>
+                        <p>• 适合新手练习</p>
+                    </div>
+                    <button class="select-difficulty-btn btn">选择简单</button>
+                </div>
+                
+                <div class="difficulty-option" data-difficulty="normal">
+                    <div class="difficulty-icon">🟡</div>
+                    <h3>普通</h3>
+                    <div class="difficulty-details">
+                        <p>• 中等打乱次数</p>
+                        <p>• 允许使用提示</p>
+                        <p>• 平衡的挑战</p>
+                    </div>
+                    <button class="select-difficulty-btn btn">选择普通</button>
+                </div>
+                
+                <div class="difficulty-option" data-difficulty="hard">
+                    <div class="difficulty-icon">🔴</div>
+                    <h3>困难</h3>
+                    <div class="difficulty-details">
+                        <p>• 大量打乱次数</p>
+                        <p>• 禁用提示功能</p>
+                        <p>• 终极挑战</p>
+                    </div>
+                    <button class="select-difficulty-btn btn">选择困难</button>
+                </div>
+            </div>
+            <div class="modal-close-btn">
+                <button id="closeDifficultyModal" class="btn">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="image-manager.js"></script>
+</body>
+</html> 
